@@ -65,6 +65,15 @@ while True:
 	maxColor=np.array((cv2.getTrackbarPos("H-max",settingWindow),cv2.getTrackbarPos("S-max",settingWindow),cv2.getTrackbarPos("V-max",settingWindow)))
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
 	
+	#applico erosione e dilatazione 
+	rectErosione = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
+	cv2.erode(thresholded, thresholded,rectErosione)
+	cv2.erode(thresholded, thresholded,rectErosione)
+	cv2.erode(thresholded, thresholded,rectErosione)
+	rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
+	cv2.dilate(thresholded, thresholded, rectDilataz);
+	cv2.dilate(thresholded, thresholded, rectDilataz);
+	cv2.dilate(thresholded, thresholded, rectDilataz);
 	
 	#visualizzo le immagini 
 	cv2.imshow(mainGui,cameraFeed)
