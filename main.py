@@ -83,13 +83,35 @@ while True:
 		cv2.dilate(thresholded, thresholded, rectDilataz)
 	
 	#applico Hough
-
 	circles = cv2.HoughCircles(thresholded, cv2.cv.CV_HOUGH_GRADIENT, dp=2, minDist=120, param1=100, param2=40, minRadius=10, maxRadius=60)
+	
+	#ATTENZIONE circles e una matrice 1xnx3
+	#print circles
+	
 	if circles is not None:
-			for c in circles[0]:
-					cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
-                        
-                     
+		maxRadius=0
+		x=0
+		y=0
+		found=False
+		for i in range(circles.size/3):
+			circle=circles[0,i]
+			if circle[2]>maxRadius:
+				found=True
+				radius=int(circle[2])
+				maxRadius=int(radius)
+				x=int(circle[0])
+				y=int(circle[1])
+			
+			
+	if found:
+		#cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
+		cv2.circle(cameraFeed, (x,y), maxRadius, (0,255,0),2)
+			
+		
+		
+
+					
+                          
 		
 	
 	#visualizzo le immagini 
