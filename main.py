@@ -17,6 +17,9 @@ thresholdWindow="Immagine rilevata"
 settingWindow="Imposta soglia"
 blurWindow="Immagine con filtro Blur"
 
+#------ IMPOSTAZIONI ELABORAZIONE ----------
+enableElab=False
+
 def onTrackbarSlide(*args):
     pass
 
@@ -48,6 +51,10 @@ capture = cv2.VideoCapture(0);
 width,height = capture.get(3),capture.get(4)
 
 createSlider()
+
+rectErosione = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
+rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
+
 #loop principale del programma
 while True:
 	#definisco la variabile per i frame catturati
@@ -66,14 +73,24 @@ while True:
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
 	
 	#applico erosione e dilatazione 
-	rectErosione = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
-	cv2.erode(thresholded, thresholded,rectErosione)
-	cv2.erode(thresholded, thresholded,rectErosione)
-	cv2.erode(thresholded, thresholded,rectErosione)
-	rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
-	cv2.dilate(thresholded, thresholded, rectDilataz);
-	cv2.dilate(thresholded, thresholded, rectDilataz);
-	cv2.dilate(thresholded, thresholded, rectDilataz);
+	if enableElab:
+		cv2.erode(thresholded, thresholded,rectErosione)
+		cv2.erode(thresholded, thresholded,rectErosione)
+		cv2.erode(thresholded, thresholded,rectErosione)
+		
+		cv2.dilate(thresholded, thresholded, rectDilataz)
+		cv2.dilate(thresholded, thresholded, rectDilataz)
+		cv2.dilate(thresholded, thresholded, rectDilataz)
+	
+	#applico Hough
+
+	circles = cv2.HoughCircles(thresholded, cv2.cv.CV_HOUGH_GRADIENT, dp=2, minDist=120, param1=100, param2=40, minRadius=10, maxRadius=60)
+	if circles is not None:
+			for c in circles[0]:
+					cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
+                        
+                     
+		
 	
 	#visualizzo le immagini 
 	cv2.imshow(mainGui,cameraFeed)
