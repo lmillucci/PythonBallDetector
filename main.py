@@ -56,17 +56,21 @@ while True:
 	#definisco la variabile per i frame catturati
 	_,cameraFeed = capture.read()
 	cameraFeed = cv2.flip(cameraFeed,1)
-	
+	#applico uno smoothing per ridurre il rumore
+	#cv.Smooth(cameraFeed, cameraFeed, cv.CV_BLUR, 3); 
+	cameraFeed=cv2.blur(cameraFeed,(3,1))
+
 	#variabile su cui salvo l'immagine HSV
 	hsvFrame = cv2.cvtColor(cameraFeed,cv2.COLOR_BGR2HSV)
-
-
-	
 
 	#filtro hsvFrame cercando solo un determinato range di colori
 	minColor=np.array((cv2.getTrackbarPos("H-min",settingWindow),cv2.getTrackbarPos("S-min",settingWindow),cv2.getTrackbarPos("V-min",settingWindow)))
 	maxColor=np.array((cv2.getTrackbarPos("H-max",settingWindow),cv2.getTrackbarPos("S-max",settingWindow),cv2.getTrackbarPos("V-max",settingWindow)))
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
+
+	#calcolo dei momenti
+        moments = cv2.moments(cv2.getMat(thresholded),0) 
+        area = cv2.getCentralMoment(moments, 0, 0) 
 
 
 	#visualizzo le immagini 
