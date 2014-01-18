@@ -18,7 +18,6 @@ settingWindow="Imposta soglia"
 blurWindow="Immagine con filtro Blur"
 
 #------ IMPOSTAZIONI ELABORAZIONE ----------
-enableElab=False
 
 def onTrackbarSlide(*args):
     pass
@@ -52,9 +51,6 @@ width,height = capture.get(3),capture.get(4)
 
 createSlider()
 
-rectErosione = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
-rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
-
 #loop principale del programma
 while True:
 	#definisco la variabile per i frame catturati
@@ -71,49 +67,8 @@ while True:
 	minColor=np.array((cv2.getTrackbarPos("H-min",settingWindow),cv2.getTrackbarPos("S-min",settingWindow),cv2.getTrackbarPos("V-min",settingWindow)))
 	maxColor=np.array((cv2.getTrackbarPos("H-max",settingWindow),cv2.getTrackbarPos("S-max",settingWindow),cv2.getTrackbarPos("V-max",settingWindow)))
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
-	
-	#applico erosione e dilatazione 
-	if enableElab:
-		cv2.erode(thresholded, thresholded,rectErosione)
-		cv2.erode(thresholded, thresholded,rectErosione)
-		cv2.erode(thresholded, thresholded,rectErosione)
-		
-		cv2.dilate(thresholded, thresholded, rectDilataz)
-		cv2.dilate(thresholded, thresholded, rectDilataz)
-		cv2.dilate(thresholded, thresholded, rectDilataz)
-	
-	#applico Hough
-	circles = cv2.HoughCircles(thresholded, cv2.cv.CV_HOUGH_GRADIENT, dp=2, minDist=120, param1=100, param2=40, minRadius=10, maxRadius=60)
-	
-	#ATTENZIONE circles e una matrice 1xnx3
-	#print circles
-	
-	if circles is not None:
-		maxRadius=0
-		x=0
-		y=0
-		found=False
-		for i in range(circles.size/3):
-			circle=circles[0,i]
-			if circle[2]>maxRadius:
-				found=True
-				radius=int(circle[2])
-				maxRadius=int(radius)
-				x=int(circle[0])
-				y=int(circle[1])
-			
-			
-	if found:
-		#cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
-		cv2.circle(cameraFeed, (x,y), maxRadius, (0,255,0),2)
-			
-		
-		
 
-					
-                          
-		
-	
+
 	#visualizzo le immagini 
 	cv2.imshow(mainGui,cameraFeed)
 	#cv2.imshow(hsvWindow, hsvFrame)
