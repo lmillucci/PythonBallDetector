@@ -69,8 +69,18 @@ while True:
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
 
 	#calcolo dei momenti
-        moments = cv2.moments(cv2.getMat(thresholded),0) 
-        area = cv2.getCentralMoment(moments, 0, 0) 
+        moments = cv2.moments(thresholded,0) 
+        area = moments['m00']
+
+	#ignoro gli oggetti troppo piccoli
+        if(area > 100000): 
+		#determino le coordinate (x;y) dell'oggetto 
+		x=moments['m10']/area
+		y=moments['m01']/area		
+		
+		#creo l'indicatore che determinera' il centro dell'oggetto		
+		cv2.circle(cameraFeed, (int(x), int(y)), 2, (255, 255, 255), 20)
+
 
 
 	#visualizzo le immagini 
