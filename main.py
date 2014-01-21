@@ -18,6 +18,7 @@ settingWindow="Imposta soglia"
 blurWindow="Immagine con filtro Blur"
 
 #------ IMPOSTAZIONI ELABORAZIONE ----------
+showWindow=True
 
 def onTrackbarSlide(*args):
     pass
@@ -82,11 +83,16 @@ while True:
 		cv2.circle(cameraFeed, (int(x), int(y)), 2, (255, 255, 255), 20)
 
 
-
-	#visualizzo le immagini 
-	cv2.imshow(mainGui,cameraFeed)
-	#cv2.imshow(hsvWindow, hsvFrame)
-	cv2.imshow(thresholdWindow,thresholded)
+	if showWindow:
+		#visualizzo le immagini 
+		cv2.imshow(mainGui,cameraFeed)
+		#cv2.imshow(hsvWindow, hsvFrame)
+		cv2.imshow(thresholdWindow,thresholded)
+	
+	if cv2.waitKey(10)==1048680:
+		showWindow= not showWindow
+		print showWindow
+		
 	
 	if cv2.waitKey(33)==27:
 		break
