@@ -37,6 +37,7 @@ def createSlider():
 	cv2.createTrackbar("H-max",settingWindow, H_MAX, 256, onTrackbarSlide)
 	cv2.createTrackbar("S-max",settingWindow, S_MAX, 256,onTrackbarSlide)
 	cv2.createTrackbar("V-max",settingWindow, V_MAX, 256,onTrackbarSlide)
+	cv2.createTrackbar("Elaborazione I/O",settingWindow,0,1,onTrackbarSlide)
 	
 
 
@@ -72,6 +73,9 @@ while True:
 	maxColor=np.array((cv2.getTrackbarPos("H-max",settingWindow),cv2.getTrackbarPos("S-max",settingWindow),cv2.getTrackbarPos("V-max",settingWindow)))
 	thresholded=cv2.inRange(hsvFrame,minColor, maxColor);
 	
+	#Verifico se e' stata abilitata l'elaborazione
+	enableElab=cv2.getTrackbarPos("Elaborazione I/O",settingWindow)
+	
 	#applico erosione e dilatazione 
 	if enableElab:
 		cv2.erode(thresholded, thresholded,rectErosione)
@@ -87,12 +91,12 @@ while True:
 	
 	#ATTENZIONE circles e una matrice 1xnx3
 	#print circles
-	
+	found=False
 	if circles is not None:
 		maxRadius=0
 		x=0
 		y=0
-		found=False
+		
 		for i in range(circles.size/3):
 			circle=circles[0,i]
 			if circle[2]>maxRadius:
@@ -107,11 +111,6 @@ while True:
 		#cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
 		cv2.circle(cameraFeed, (x,y), maxRadius, (0,255,0),2)
 			
-		
-		
-
-					
-                          
 		
 	
 	#visualizzo le immagini 
