@@ -56,6 +56,9 @@ createSlider()
 rectErosione = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
 rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
 
+
+
+
 #loop principale del programma
 while True:
 	#definisco la variabile per i frame catturati
@@ -110,7 +113,10 @@ while True:
 	if found:
 		#cv2.circle(cameraFeed, (c[0],c[1]), c[2], (0,255,0),2)
 		cv2.circle(cameraFeed, (x,y), maxRadius, (0,255,0),2)
-			
+		#salvo le coordinate trovate in un file
+		out_file = open("coordinate.txt","w")
+		out_file.write(str(x)+"\n"+str(y)+"\n")
+		out_file.close()	
 		
 	
 	#visualizzo le immagini 
@@ -120,4 +126,6 @@ while True:
 	
 	if cv2.waitKey(33)==27:
 		break
-	
+
+
+
