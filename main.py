@@ -115,8 +115,12 @@ while True:
 		cv2.circle(cameraFeed, (x,y), maxRadius, (0,255,0),2)
 		#salvo le coordinate trovate in un file
 		out_file = open("coordinate.txt","w")
-		out_file.write(str(x)+"\n"+str(y)+"\n")
+		out_file.write(str(x)+";"+str(y))
 		out_file.close()	
+	else:
+		out_file = open("coordinate.txt","w")
+		out_file.write("0;0")
+		out_file.close()		
 		
 	
 	#visualizzo le immagini 
