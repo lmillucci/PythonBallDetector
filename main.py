@@ -10,6 +10,9 @@ H_MAX = 256
 S_MAX = 256
 V_MAX = 256
 
+IMAGE_WIDTH=160
+IMAGE_HEIGHT=120
+
 #------ FINESTRE -----------
 mainGui="Immagine acquisita"
 hsvWindow="Immagine HSV"
@@ -61,6 +64,8 @@ rectDilataz = cv2.getStructuringElement( cv2.MORPH_RECT,(8,8))
 
 #loop principale del programma
 while True:
+	capture.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, IMAGE_WIDTH)
+	capture.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, IMAGE_HEIGHT)
 	#definisco la variabile per i frame catturati
 	_,cameraFeed = capture.read()
 	cameraFeed = cv2.flip(cameraFeed,1)
